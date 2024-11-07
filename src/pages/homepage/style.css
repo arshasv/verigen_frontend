@@ -1,0 +1,238 @@
+/* General layout */
+.home-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #f0f4ff;
+}
+
+.overlap-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.overlap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.desktop {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.workflow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.overlap-group {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.view {
+  position: relative;
+}
+
+.img {
+  width: 100%;
+  height: auto;
+}
+
+.overlap-group-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.overlap-2 {
+  position: relative;
+}
+
+.ellipse,
+.ellipse-2,
+.ellipse-3,
+.ellipse-4 {
+  border-radius: 50%;
+  background-color: #e0e7ff;
+}
+
+.image,
+.image-2,
+.image-3 {
+  width: 100%;
+  height: auto;
+}
+
+.element {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.overlap-3 {
+  position: relative;
+}
+
+.div-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.overlap-4 {
+  position: relative;
+}
+
+.group-2 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.overlap-group-2 {
+  position: relative;
+}
+
+.group-3 {
+  width: 100%;
+  height: auto;
+}
+
+.rectangle {
+  background-color: #d0d7ff;
+}
+
+.group-4,
+.group-9,
+.group-11,
+.group-13,
+.group-19,
+.group-20,
+.group-22,
+.group-29 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.overlap-5,
+.overlap-7,
+.overlap-8,
+.overlap-9,
+.overlap-13,
+.overlap-14,
+.overlap-15,
+.overlap-19 {
+  position: relative;
+}
+
+.group-5,
+.group-10,
+.group-12,
+.group-16,
+.group-21,
+.group-25,
+.group-28 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.overlap-6 {
+  position: relative;
+}
+
+.group-6,
+.group-7,
+.group-8 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.overlap-group-3 {
+  position: relative;
+}
+
+.union {
+  width: 100%;
+  height: auto;
+}
+
+.rectangle-2,
+.rectangle-3 {
+  background-color: #c0c7ff;
+}
+
+.text-wrapper,
+.text-wrapper-2,
+.text-wrapper-3,
+.text-wrapper-4,
+.text-wrapper-5,
+.text-wrapper-6,
+.text-wrapper-7,
+.text-wrapper-8,
+.text-wrapper-9,
+.text-wrapper-10,
+.text-wrapper-11 {
+  font-size: 16px;
+  color: #000;
+}
+
+.frame-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 20px;
+}
+
+.frame {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.title {
+  font-size: 24px;
+  color: #000;
+}
+
+.user {
+  width: 40px;
+  height: 40px;
+}
+
+.actions {
+  margin-top: 20px;
+}
+
+.actions button {
+  background-color: #007bff;
+  color: #fff;
+}

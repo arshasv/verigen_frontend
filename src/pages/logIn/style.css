@@ -1,80 +1,122 @@
-.sign-up {
-    background-color: #ffffff;
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    padding: 20px;
-  }
-  
-  .sign-up .content-wrapper {
-    background-color: #ffffff;
-    max-width: 1440px;
-    width: 100%;
-    padding: 20px;
-  }
-  
-  .sign-up .content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 40px;
-    width: 100%;
-    max-width: 400px;
-  }
-  
-  .sign-up .header-and-form {
-    display: flex;
-    flex-direction: column;
-    gap: 32px;
-    width: 100%;
-  }
-  
-  .sign-up .header {
-    text-align: center;
-  }
-  
-  .sign-up .text {
-    color: #1f2937;
-    font-family: "Montserrat-Bold", Helvetica, sans-serif;
-    font-size: 24px;
-    font-weight: 700;
-  }
-  
-  .sign-up .supporting-text {
-    color: #6b7280;
-    font-family: "Montserrat-SemiBold", Helvetica, sans-serif;
-    font-size: 14px;
-    font-weight: 600;
-  }
-  
-  .sign-up .form {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    width: 100%;
-  }
-  
-  .sign-up .actions {
-    margin-top: 20px;
-  }
-  
-  .sign-up .row-2 {
-    display: flex;
-    justify-content: center;
-    gap: 4px;
-  }
-  
-  .sign-up .text-3 {
-    color: #6b7280;
-    font-family: "Montserrat-SemiBold", Helvetica, sans-serif;
-    font-size: 14px;
-    font-weight: 600;
-  }
-  
-  .sign-up .MuiButton-root {
-    text-transform: none;
-  }
-  
-  .sign-up .MuiTextField-root {
-    width: 100%;
-  }
+.login {
+  background-color: #ffffff;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: 100vh;
+  align-items: center;
+}
+
+.login .container-wrapper {
+  background-color: #ffffff;
+  width: 100%;
+  max-width: 1440px;
+  padding: 0 16px;
+}
+
+.login .container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 400px;
+}
+
+.login .content {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  width: 100%;
+}
+
+.login .header-and-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+}
+
+.login .header {
+  text-align: center;
+}
+
+.login .text-and-supporting {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.login .text {
+  color: #1f2937;
+  font-family: "Montserrat-Bold", Helvetica;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.login .supporting-text {
+  color: #6b7280;
+  font-family: "Montserrat-SemiBold", Helvetica;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.login .form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.login .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.login .label {
+  color: #4b5563;
+  font-family: "Montserrat-SemiBold", Helvetica;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.login .input {
+  display: flex;
+  align-items: center;
+  background-color: #ffffff;
+  border: 1px solid #cfd4dc;
+  border-radius: 8px;
+  padding: 10px 14px;
+}
+
+.login .text-wrapper {
+  border: none;
+  outline: none;
+  width: 100%;
+  font-family: "Montserrat-SemiBold", Helvetica;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.login .row {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.login .actions {
+  display: flex;
+  justify-content: center;
+}
+
+.login .row-2 {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+}
+
+.login .text-2 {
+  color: #6b7280;
+  font-family: "Montserrat-SemiBold", Helvetica;
+  font-size: 14px;
+  font-weight: 600;
+}
