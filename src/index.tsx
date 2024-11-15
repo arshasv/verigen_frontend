@@ -1,15 +1,16 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom';
-import App from './App';
+import { CssBaseline } from '@mui/material';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import UploadPage from './pages/Upload'; 
 
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
-);
-root.render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </React.StrictMode>
-);
+function App() {
+  return (
+    <Router>
+      <CssBaseline />
+      <Routes>
+        <Route path="/" element={<UploadPage />} />
+      </Routes>
+    </Router>
+  );
+}
+
+export default App;
