@@ -4,8 +4,6 @@ import {
   Box,
   Typography,
   Stack,
-  FormControlLabel,
-  Checkbox,
 } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { FC } from 'react';
@@ -16,6 +14,7 @@ import FormInput from '../components/FormInput';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from '@emotion/styled';
 
+// Styled Link component
 export const LinkItem = styled(Link)`
   text-decoration: none;
   color: #3683dc;
@@ -25,6 +24,7 @@ export const LinkItem = styled(Link)`
   }
 `;
 
+// Zod schema for validation
 const signinSchema = object({
   email: string().min(1, 'Email is required').email('Email is invalid'),
   password: string()
@@ -33,9 +33,10 @@ const signinSchema = object({
     .max(32, 'Password must be less than 32 characters'),
 });
 
+// Type for sign-in form
 type ISignin = TypeOf<typeof signinSchema>;
 
-const LoginPage: FC = () => {
+const SigninPage: FC = () => {
   const navigate = useNavigate();
   const defaultValues: ISignin = {
     email: '',
@@ -148,21 +149,6 @@ const LoginPage: FC = () => {
                         focused
                       />
 
-                      <FormControlLabel
-                        control={
-                          <Checkbox size='small' aria-label='trust this device checkbox' />
-                        }
-                        label={
-                          <Typography variant='body2' sx={{
-                            fontSize: '0.8rem',
-                            fontWeight: 400,
-                            color: '#5e5b5d',
-                          }}>
-                            Trust this device
-                          </Typography>
-                        }
-                      />
-
                       <LoadingButton
                         loading={false}
                         type='submit'
@@ -190,8 +176,8 @@ const LoginPage: FC = () => {
                       <LinkItem to='/signup'>Sign up here</LinkItem>
                     </Typography>
                     <Typography sx={{ fontSize: '0.9rem' }}>
-                      Forgot your{' '}
-                      <LinkItem to='/forgot-password'>password?</LinkItem>
+                     
+                      <LinkItem to='/forgot-password'> Forgot password </LinkItem>?
                     </Typography>
                   </Stack>
                 </Grid>
@@ -204,4 +190,4 @@ const LoginPage: FC = () => {
   );
 };
 
-export default LoginPage;
+export default SigninPage;
