@@ -43,7 +43,7 @@ export default function Component() {
           },
         }}
       >
-        Sign in
+        Let's get started
       </Button>
     </Box>
   )
