@@ -1,12 +1,12 @@
-import { Box, Button, Typography } from '@mui/material'
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
-import { useNavigate } from 'react-router-dom'
+import { Box, Button, Typography } from '@mui/material';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import { useNavigate } from 'react-router-dom';
 
 export default function PasswordVerified() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleLogin = () => {
-    navigate('/')
+    navigate('/');
   }
 
   return (
@@ -14,9 +14,7 @@ export default function PasswordVerified() {
       sx={{
         minHeight: '100vh',
         width: '100%',
-        backgroundImage: 'url(https://hebbkx1anhila5yf.public.blob.vercel-storage.com/freepik__upload__20762-bM37lGVCw9FXESL3MqdezcgS1EcUHo.jpeg)',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
+        // Removed backgroundImage, backgroundSize, and backgroundPosition
       }}
     >
       <Box
@@ -86,8 +84,7 @@ export default function PasswordVerified() {
             }}
           >
             Your password has been successfully reset.
-            <br />
-            Click below to log in magically.
+           
           </Typography>
 
           <Button
@@ -110,5 +107,5 @@ export default function PasswordVerified() {
         </Box>
       </Box>
     </Box>
-  )
+  );
 }
