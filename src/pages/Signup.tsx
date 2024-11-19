@@ -13,6 +13,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import FormInput from '../components/FormInput';
 import { Link, useNavigate } from 'react-router-dom';
 
+// Zod schema for validation
 const signupSchema = object({
   name: string().min(1, 'Name is required').max(70),
   email: string().min(1, 'Email is required').email('Email is invalid'),
@@ -28,6 +29,7 @@ const signupSchema = object({
   message: 'Passwords do not match',
 });
 
+// Type for sign-up form
 type ISignUp = TypeOf<typeof signupSchema>;
 
 const SignupPage: FC = () => {
@@ -59,9 +61,7 @@ const SignupPage: FC = () => {
       sx={{
         minHeight: '100vh',
         width: '100%',
-        backgroundImage: 'url(https://hebbkx1anhila5yf.public.blob.vercel-storage.com/freepik__upload__20762-bM37lGVCw9FXESL3MqdezcgS1EcUHo.jpeg)',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
+        // Removed backgroundImage, backgroundSize, and backgroundPosition
       }}
     >
       <Container
