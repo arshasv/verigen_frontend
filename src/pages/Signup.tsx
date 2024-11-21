@@ -12,45 +12,49 @@ import { object, string, TypeOf } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import FormInput from '../components/FormInput';
 import { Link, useNavigate } from 'react-router-dom';
-import styled from '@emotion/styled';
-
-// Styled Link component
-export const LinkItem = styled(Link)`
-  text-decoration: none;
-  color: #3683dc;
-  &:hover {
-    text-decoration: underline;
-    color: #5ea1b6;
-  }
-`;
 
 // Zod schema for validation
-const signinSchema = object({
+const signupSchema = object({
+  name: string().min(1, 'Name is required').max(70),
   email: string().min(1, 'Email is required').email('Email is invalid'),
   password: string()
-    .min(1, 'Password is required')
-    .min(8, 'Password must be more than 8 characters')
-    .max(32, 'Password must be less than 32 characters'),
+    .min(8, 'Password must be at least 8 characters long')
+    .max(32, 'Password must be less than 32 characters')
+    .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
+    .regex(/[a-zA-Z]/, 'Password must contain at least one letter')
+    .regex(/[0-9]/, 'Password must contain at least one number')
+    .regex(/[^a-zA-Z0-9]/, 'Password must contain at least one special character'),
+    
+  passwordConfirm: string().min(1, 'Please confirm your password'),
+  securityQuestion: string().min(1, 'Security question is required'),
+  securityAnswer: string().min(1, 'Answer is required'),
+}).refine((data) => data.password === data.passwordConfirm, {
+  path: ['passwordConfirm'],
+  message: 'Passwords do not match',
 });
 
-// Type for sign-in form
-type ISignin = TypeOf<typeof signinSchema>;
+type ISignUp = TypeOf<typeof signupSchema>;
 
-const SigninPage: FC = () => {
+const SignupPage: FC = () => {
   const navigate = useNavigate();
-  const defaultValues: ISignin = {
+  
+  const defaultValues: ISignUp = {
+    name: '',
     email: '',
     password: '',
+    passwordConfirm: '',
+    securityQuestion: '',
+    securityAnswer: '',
   };
 
-  const methods = useForm<ISignin>({
-    resolver: zodResolver(signinSchema),
+  const methods = useForm<ISignUp>({
+    resolver: zodResolver(signupSchema),
     defaultValues,
   });
 
-  const onSubmitHandler: SubmitHandler<ISignin> = (values: ISignin) => {
-    console.log(values);
-   
+  const onSubmitHandler: SubmitHandler<ISignUp> = (values: ISignUp) => {
+    console.log(JSON.stringify(values, null, 4));
+    
     navigate('/verification');
   };
 
@@ -59,7 +63,6 @@ const SigninPage: FC = () => {
       sx={{
         minHeight: '100vh',
         width: '100%',
-        // Removed backgroundImage, backgroundSize, and backgroundPosition
       }}
     >
       <Container
@@ -86,14 +89,27 @@ const SigninPage: FC = () => {
               boxShadow: '0px 4px 20px rgba(0,0,0,0.1)',
             }}
           >
-            <FormProvider {...methods}>
-              <Grid
-                container
-                sx={{
-                  py: '6rem',
-                  px: { xs: '2rem', sm: '3rem' },
-                }}
-              >
+            <Grid
+              container
+              sx={{
+                py: '6rem',
+                px: { xs: '2rem', sm: '3rem' },
+              }}
+            >
+              <FormProvider {...methods}>
+                <Typography
+                  variant='h4'
+                  component='h1'
+                  sx={{
+                    textAlign: 'center',
+                    width: '100%',
+                    mb: '1.5rem',
+                    pb: { sm: '3rem' },
+                    color: '#333',
+                  }}
+                >
+                  Welcome
+                </Typography>
                 <Grid
                   item
                   container
@@ -114,38 +130,19 @@ const SigninPage: FC = () => {
                       onSubmit={methods.handleSubmit(onSubmitHandler)}
                     >
                       <Typography
-                        variant='h4'
-                        component='h1'
-                        sx={{
-                          textAlign: 'center',
-                          mb: '2rem',
-                          color: '#333',
-                        }}
-                      >
-                        Welcome Back
-                      </Typography>
-                      <Typography
                         variant='h6'
-                        component='h2'
+                        component='h1'
                         sx={{ textAlign: 'center', mb: '1.5rem', color: '#555' }}
                       >
-                        Sign in to your account
+                        Create your account
                       </Typography>
 
-                      <FormInput
-                        label='Enter your email'
-                        type='email'
-                        name='email'
-                        focused
-                        required
-                      />
-                      <FormInput
-                        type='password'
-                        label='Password'
-                        name='password'
-                        required
-                        focused
-                      />
+                      <FormInput label='Name' type='text' name='name' focused required />
+                      <FormInput label='Enter your email' type='email' name='email' focused required />
+                      <FormInput type='password' label='Password' name='password' required focused />
+                      <FormInput type='password' label='Confirm Password' name='passwordConfirm' required focused />
+                      <FormInput label='Security Question' type='text' name='securityQuestion' focused required />
+                      <FormInput label='Answer' type='text' name='securityAnswer' focused required />
 
                       <LoadingButton
                         loading={false}
@@ -162,7 +159,7 @@ const SigninPage: FC = () => {
                           },
                         }}
                       >
-                        Sign In
+                        Sign Up
                       </LoadingButton>
                     </Box>
                   </Grid>
@@ -170,17 +167,12 @@ const SigninPage: FC = () => {
                 <Grid container justifyContent='center'>
                   <Stack sx={{ mt: '3rem', textAlign: 'center' }}>
                     <Typography sx={{ fontSize: '0.9rem', mb: '1rem' }}>
-                      Need an account?{' '}
-                      <LinkItem to='/signup'>Sign up here</LinkItem>
-                    </Typography>
-                    <Typography sx={{ fontSize: '0.9rem' }}>
-                     
-                      <LinkItem to='/forgot-password'> Forgot password </LinkItem>?
+                      Already have an account? <Link to='/'>Sign in</Link>
                     </Typography>
                   </Stack>
                 </Grid>
-              </Grid>
-            </FormProvider>
+              </FormProvider>
+            </Grid>
           </Grid>
         </Grid>
       </Container>
@@ -188,4 +180,4 @@ const SigninPage: FC = () => {
   );
 };
 
-export default SigninPage;
+export default SignupPage;
