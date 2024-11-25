@@ -24,7 +24,7 @@ export const LinkItem = styled(Link)`
   }
 `;
 
-// Zod schema for validation
+
 const signinSchema = object({
   email: string().min(1, 'Email is required').email('Email is invalid'),
   password: string()
@@ -59,7 +59,7 @@ const SigninPage: FC = () => {
       sx={{
         minHeight: '100vh',
         width: '100%',
-        backgroundImage: 'url(https://hebbkx1anhila5yf.public.blob.vercel-storage.com/freepik__upload__20762-bM37lGVCw9FXESL3MqdezcgS1EcUHo.jpeg)',
+
         backgroundSize: 'cover',
         backgroundPosition: 'center',
       }}

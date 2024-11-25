@@ -5,7 +5,7 @@ import { useForm, SubmitHandler, FormProvider } from 'react-hook-form';
 import { object, string, TypeOf } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import FormInput from '../components/FormInput';
-import { Link, useNavigate } from 'react-router-dom'; // Ensure you're using react-router-dom
+import { Link, useNavigate } from 'react-router-dom'; 
 import styled from '@emotion/styled';
 import KeyIcon from '@mui/icons-material/Key';
 
@@ -37,8 +37,8 @@ const ForgotPasswordPage: FC = () => {
 
   const onSubmitHandler: SubmitHandler<IForgotPassword> = (values: IForgotPassword) => {
     console.log(values);
-    // Handle password reset logic here
-    navigate('/authentication'); // Navigate to authentication page after form submission
+
+    navigate('/authentication'); 
   };
 
   return (
@@ -46,7 +46,7 @@ const ForgotPasswordPage: FC = () => {
       sx={{
         minHeight: '100vh',
         width: '100%',
-        backgroundImage: 'url(https://hebbkx1anhila5yf.public.blob.vercel-storage.com/freepik__upload__20762-bM37lGVCw9FXESL3MqdezcgS1EcUHo.jpeg)',
+
         backgroundSize: 'cover',
         backgroundPosition: 'center',
       }}
@@ -143,7 +143,7 @@ const ForgotPasswordPage: FC = () => {
                       />
 
                       <LoadingButton
-                        loading={false} // You can manage loading state if needed
+                        loading={false} 
                         type='submit'
                         variant='contained'
                         sx={{
