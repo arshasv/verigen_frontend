@@ -59,9 +59,13 @@ const SigninPage: FC = () => {
       sx={{
         minHeight: '100vh',
         width: '100%',
+<<<<<<< HEAD
 
         backgroundSize: 'cover',
         backgroundPosition: 'center',
+=======
+        // Removed backgroundImage, backgroundSize, and backgroundPosition
+>>>>>>> origin/develop
       }}
     >
       <Container
