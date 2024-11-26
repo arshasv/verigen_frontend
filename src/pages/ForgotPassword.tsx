@@ -1,57 +1,44 @@
-import {
-  Container,
-  Grid,
-  Box,
-  Typography,
-  Stack,
-} from '@mui/material';
+import { Container, Grid, Box, Typography, Stack } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { FC } from 'react';
 import { useForm, SubmitHandler, FormProvider } from 'react-hook-form';
 import { object, string, TypeOf } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import FormInput from '../components/FormInput';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'; // Ensure you're using react-router-dom
+import styled from '@emotion/styled';
+import KeyIcon from '@mui/icons-material/Key';
 
-const signupSchema = object({
-  name: string().min(1, 'Name is required').max(70),
+export const LinkItem = styled(Link)`
+  text-decoration: none;
+  color: #3683dc;
+  &:hover {
+    text-decoration: underline;
+    color: #5ea1b6;
+  }
+`;
+
+const forgotPasswordSchema = object({
   email: string().min(1, 'Email is required').email('Email is invalid'),
-  password: string()
-    .min(1, 'Password is required')
-    .min(8, 'Password must be more than 8 characters')
-    .max(32, 'Password must be less than 32 characters'),
-  passwordConfirm: string().min(1, 'Please confirm your password'),
-  securityQuestion: string().min(1, 'Security question is required'),
-  securityAnswer: string().min(1, 'Answer is required'),
-}).refine((data) => data.password === data.passwordConfirm, {
-  path: ['passwordConfirm'],
-  message: 'Passwords do not match',
 });
 
-type ISignUp = TypeOf<typeof signupSchema>;
+type IForgotPassword = TypeOf<typeof forgotPasswordSchema>;
 
-const SignupPage: FC = () => {
+const ForgotPasswordPage: FC = () => {
   const navigate = useNavigate();
-  
-  const defaultValues: ISignUp = {
-    name: '',
+  const defaultValues: IForgotPassword = {
     email: '',
-    password: '',
-    passwordConfirm: '',
-    securityQuestion: '',
-    securityAnswer: '',
   };
 
-  const methods = useForm<ISignUp>({
-    resolver: zodResolver(signupSchema),
+  const methods = useForm<IForgotPassword>({
+    resolver: zodResolver(forgotPasswordSchema),
     defaultValues,
   });
 
-  const onSubmitHandler: SubmitHandler<ISignUp> = (values: ISignUp) => {
-    console.log(JSON.stringify(values, null, 4));
-    // Handle signup logic here
-    // After successful signup, navigate to the verification page
-    navigate('/verification');
+  const onSubmitHandler: SubmitHandler<IForgotPassword> = (values: IForgotPassword) => {
+    console.log(values);
+    // Handle password reset logic here
+    navigate('/authentication'); // Navigate to authentication page after form submission
   };
 
   return (
@@ -88,27 +75,14 @@ const SignupPage: FC = () => {
               boxShadow: '0px 4px 20px rgba(0,0,0,0.1)',
             }}
           >
-            <Grid
-              container
-              sx={{
-                py: '6rem',
-                px: { xs: '2rem', sm: '3rem' },
-              }}
-            >
-              <FormProvider {...methods}>
-                <Typography
-                  variant='h4'
-                  component='h1'
-                  sx={{
-                    textAlign: 'center',
-                    width: '100%',
-                    mb: '1.5rem',
-                    pb: { sm: '3rem' },
-                    color: '#333',
-                  }}
-                >
-                  Welcome
-                </Typography>
+            <FormProvider {...methods}>
+              <Grid
+                container
+                sx={{
+                  py: '6rem',
+                  px: { xs: '2rem', sm: '3rem' },
+                }}
+              >
                 <Grid
                   item
                   container
@@ -128,23 +102,48 @@ const SignupPage: FC = () => {
                       autoComplete='off'
                       onSubmit={methods.handleSubmit(onSubmitHandler)}
                     >
-                      <Typography
-                        variant='h6'
-                        component='h1'
-                        sx={{ textAlign: 'center', mb: '1.5rem', color: '#555' }}
+                      <Box
+                        sx={{
+                          width: '48px',
+                          height: '48px',
+                          borderRadius: '50%',
+                          bgcolor: 'rgba(54, 131, 220, 0.1)',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          margin: '0 auto 1.5rem',
+                        }}
                       >
-                        Create your account
+                        <KeyIcon sx={{ color: '#3683dc', fontSize: '24px' }} />
+                      </Box>
+                      <Typography
+                        variant='h4'
+                        component='h1'
+                        sx={{
+                          textAlign: 'center',
+                          mb: '1rem',
+                          color: '#333',
+                        }}
+                      >
+                        Forgot Password?
+                      </Typography>
+                      <Typography
+                        variant='body1'
+                        sx={{ textAlign: 'center', mb: '2rem', color: '#555' }}
+                      >
+                        No worries, we'll send you reset instructions.
                       </Typography>
 
-                      <FormInput label='Name' type='text' name='name' focused required />
-                      <FormInput label='Enter your email' type='email' name='email' focused required />
-                      <FormInput type='password' label='Password' name='password' required focused />
-                      <FormInput type='password' label='Confirm Password' name='passwordConfirm' required focused />
-                      <FormInput label='Security Question' type='text' name='securityQuestion' focused required />
-                      <FormInput label='Answer' type='text' name='securityAnswer' focused required />
+                      <FormInput
+                        label='Enter your email'
+                        type='email'
+                        name='email'
+                        focused
+                        required
+                      />
 
                       <LoadingButton
-                        loading={false}
+                        loading={false} // You can manage loading state if needed
                         type='submit'
                         variant='contained'
                         sx={{
@@ -158,20 +157,21 @@ const SignupPage: FC = () => {
                           },
                         }}
                       >
-                        Sign Up
+                        Proceed
                       </LoadingButton>
                     </Box>
                   </Grid>
                 </Grid>
                 <Grid container justifyContent='center'>
                   <Stack sx={{ mt: '3rem', textAlign: 'center' }}>
-                    <Typography sx={{ fontSize: '0.9rem', mb: '1rem' }}>
-                      Already have an account? <Link to='/'>Sign in</Link>
+                    <Typography sx={{ fontSize: '0.9rem' }}>
+                      Remember your password?{' '}
+                      <LinkItem to='/'>Back to Sign in</LinkItem> 
                     </Typography>
                   </Stack>
                 </Grid>
-              </FormProvider>
-            </Grid>
+              </Grid>
+            </FormProvider>
           </Grid>
         </Grid>
       </Container>
@@ -179,4 +179,4 @@ const SignupPage: FC = () => {
   );
 };
 
-export default SignupPage;
+export default ForgotPasswordPage;
