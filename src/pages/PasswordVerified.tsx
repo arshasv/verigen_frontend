@@ -14,7 +14,7 @@ export default function PasswordVerified() {
       sx={{
         minHeight: '100vh',
         width: '100%',
-        // Removed backgroundImage, backgroundSize, and backgroundPosition
+      
       }}
     >
       <Box
@@ -102,7 +102,7 @@ export default function PasswordVerified() {
               },
             }}
           >
-            Log in
+            Let's get started
           </Button>
         </Box>
       </Box>
