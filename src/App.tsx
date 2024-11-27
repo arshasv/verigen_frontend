@@ -5,6 +5,7 @@ import SignupPage from './pages/Signup';
 import ForgotPassword  from './pages/ForgotPassword';
 import Authentication from './pages/Authentication'; 
 import PasswordVerified from './pages/PasswordVerified';
+import Validation from './pages/Validation';
 function App() {
   return (
     <Router>
@@ -15,6 +16,8 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/Authentication" element={<Authentication />} />
         <Route path="/password-verified" element={<PasswordVerified />} />
+        <Route path="/validation" element={<Validation />} />
+
 
       </Routes>
     </Router>
