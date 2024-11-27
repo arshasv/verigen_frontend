@@ -6,6 +6,8 @@ import ForgotPassword  from './pages/ForgotPassword';
 import Authentication from './pages/Authentication'; 
 import PasswordVerified from './pages/PasswordVerified';
 import Validation from './pages/Validation';
+import SetNewPassword from './pages/SetNewPassword';
+import Home from './pages/Home'; 
 function App() {
   return (
     <Router>
@@ -17,6 +19,10 @@ function App() {
         <Route path="/Authentication" element={<Authentication />} />
         <Route path="/password-verified" element={<PasswordVerified />} />
         <Route path="/validation" element={<Validation />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/new-password" element={<SetNewPassword />} />
+
+
 
 
       </Routes>
