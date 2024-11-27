@@ -1,7 +1,14 @@
 import { Box, Button, Typography } from '@mui/material'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import { useNavigate } from 'react-router-dom';
 
 export default function Component() {
+  const navigate = useNavigate(); 
+
+  const handleButtonClick = () => {
+    navigate('/homepage'); 
+  };
+
   return (
     <Box
       sx={{
@@ -32,8 +39,9 @@ export default function Component() {
         Verification Successful
       </Typography>
       <Button
-        variant="contained"
-        sx={{
+      variant="contained"
+      onClick={handleButtonClick} 
+      sx={{
           backgroundColor: '#4361ee',
           px: 4,
           py: 1,
