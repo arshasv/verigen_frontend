@@ -5,7 +5,9 @@ import SignupPage from './pages/Signup';
 import ForgotPassword  from './pages/ForgotPassword';
 import Authentication from './pages/Authentication'; 
 import PasswordVerified from './pages/PasswordVerified';
-import SetNewPasswordPage from './pages/SetNewPassword'; 
+import Validation from './pages/Validation'; 
+import SetNewPassword from './pages/SetNewPassword';
+
 function App() {
   return (
     <Router>
@@ -16,7 +18,8 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/Authentication" element={<Authentication />} />
         <Route path="/password-verified" element={<PasswordVerified />} />
-        <Route path="/new-password" element={<SetNewPasswordPage />} />
+        <Route path="/validation" element={<Validation />} />
+        <Route path="/new-password" element={<SetNewPassword />} />
 
       </Routes>
     </Router>

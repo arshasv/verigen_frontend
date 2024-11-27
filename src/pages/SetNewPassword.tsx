@@ -1,23 +1,52 @@
-import { useState } from 'react'
-import { Box, Button, TextField, Typography } from '@mui/material'
-import KeyIcon from '@mui/icons-material/Key'
+import { useState } from 'react';
+import { Box, Button, TextField, Typography } from '@mui/material';
+import KeyIcon from '@mui/icons-material/Key';
+import { object, string } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm, SubmitHandler } from 'react-hook-form';
 
-export default function Component() {
-  const [passwords, setPasswords] = useState({
-    newPassword: '',
-    confirmPassword: ''
-  })
+// Zod schema for password validation
+const passwordSchema = object({
+  newPassword: string()
+    .min(8, 'Password must be at least 8 characters long')
+    .max(32, 'Password must be less than 32 characters')
+    .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
+    .regex(/[a-zA-Z]/, 'Password must contain at least one letter')
+    .regex(/[0-9]/, 'Password must contain at least one number')
+    .regex(/[^a-zA-Z0-9]/, 'Password must contain at least one special character'),
+    
+  passwordConfirm: string().min(1, 'Please confirm your password'),
+}).refine((data) => data.newPassword === data.passwordConfirm, {
+  path: ['passwordConfirm'],
+  message: 'Passwords do not match',
+});
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    // Handle password reset logic here
-    console.log('Password reset submitted:', passwords)
-  }
+type ISetNewPassword = {
+  newPassword: string;
+  passwordConfirm: string;
+};
+
+export default function SetNewPassword() {
+  const [errorMessage, setErrorMessage] = useState('');
+  
+  const methods = useForm<ISetNewPassword>({
+    resolver: zodResolver(passwordSchema),
+    defaultValues: {
+      newPassword: '',
+      passwordConfirm: '',
+    },
+  });
+
+  const onSubmitHandler: SubmitHandler<ISetNewPassword> = (values) => {
+    console.log('New password submitted:', values);
+    
+    setErrorMessage(''); 
+  };
 
   return (
     <Box
       component="form"
-      onSubmit={handleSubmit}
+      onSubmit={methods.handleSubmit(onSubmitHandler)}
       sx={{
         height: '100vh',
         display: 'flex',
@@ -66,16 +95,29 @@ export default function Component() {
           mb: 2,
         }}
       >
-        Your new password must be different to previously used passwords.
+        Your new password must be different from previously used passwords.
       </Typography>
+
+      {errorMessage && (
+        <Typography
+          variant="body2"
+          sx={{
+            color: 'error.main',
+            textAlign: 'center',
+            mb: 2,
+          }}
+        >
+          {errorMessage}
+        </Typography>
+      )}
 
       <TextField
         fullWidth
         type="password"
         label="New Password"
-        value={passwords.newPassword}
-        onChange={(e) => setPasswords({ ...passwords, newPassword: e.target.value })}
-        helperText="Must be at least 8 characters."
+        {...methods.register('newPassword')}
+        helperText={methods.formState.errors.newPassword?.message || "Must be at least 8 characters and include uppercase letters, lowercase letters, numbers, and special characters."}
+        error={!!methods.formState.errors.newPassword}
         sx={{
           maxWidth: 400,
           mb: 1,
@@ -86,8 +128,9 @@ export default function Component() {
         fullWidth
         type="password"
         label="Confirm New Password"
-        value={passwords.confirmPassword}
-        onChange={(e) => setPasswords({ ...passwords, confirmPassword: e.target.value })}
+        {...methods.register('passwordConfirm')}
+        helperText={methods.formState.errors.passwordConfirm?.message}
+        error={!!methods.formState.errors.passwordConfirm}
         sx={{
           maxWidth: 400,
           mb: 3,
@@ -111,5 +154,5 @@ export default function Component() {
         Reset Password
       </Button>
     </Box>
-  )
+  );
 }
