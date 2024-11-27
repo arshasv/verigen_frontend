@@ -13,8 +13,8 @@ import {
 import { styled } from '@mui/material/styles';
 import { useForm, Controller } from 'react-hook-form';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { useNavigate } from 'react-router-dom';
 
-// Create a custom theme
 const theme = createTheme({
   palette: {
     primary: {
@@ -63,7 +63,7 @@ const StepCard = styled(Paper)({
 
 export default function Upload() {
   const { control } = useForm();
-
+  const navigate = useNavigate();
   const steps = [
     { id: 1, title: 'Code Upload' },
     { id: 2, title: 'Code Syntax Verification' },
@@ -142,11 +142,13 @@ export default function Upload() {
               control={control}
               defaultValue={false}
               render={({ field }) => (
+                
                 <GetStartedButton
                   {...field}
                   variant="contained"
                   color="primary"
                   size="large"
+                  onClick={() => navigate('/upload')}
                 >
                   Get Started
                 </GetStartedButton>
