@@ -63,6 +63,9 @@ const SignupPage: FC = () => {
       sx={{
         minHeight: '100vh',
         width: '100%',
+
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
       }}
     >
       <Container

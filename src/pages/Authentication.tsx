@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Box, Button, TextField, Typography } from '@mui/material'
 import KeyIcon from '@mui/icons-material/Key'
 
-export default function AuthVerify() {
+export default function Authentication() {
   const [answer, setAnswer] = useState('')
   const [securityQuestion, setSecurityQuestion] = useState('')
 
