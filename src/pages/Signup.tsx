@@ -55,6 +55,25 @@ const SignupPage: FC = () => {
   const onSubmitHandler: SubmitHandler<ISignUp> = (values: ISignUp) => {
     console.log(JSON.stringify(values, null, 4));
     
+    try {
+      const response = await signUpUser(dataToSend);
+      console.log('Response:', response);
+      navigate('/verification-successful');
+    } catch (error: any) { // Type the error as any for flexibility
+
+      // Access error details directly from the error object
+      console.error('Error Message:', error.response?.data); 
+      console.error('Error Status:', error.response?.status);
+      if (error.response?.status === 400) {
+        alert('Invalid email or password.');
+      } else if (error.response?.status === 500) {
+        alert('Server error. Please try again later.'); 
+      } else {
+        console.error('An unexpected error occurred:', error);
+        alert('Something went wrong. Please try again.');
+      }
+    }
+
     navigate('/verification');
   };
 
