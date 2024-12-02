@@ -12,6 +12,7 @@ import { object, string, TypeOf } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import FormInput from '../components/FormInput';
 import { Link, useNavigate } from 'react-router-dom';
+import { signUpUser } from '../API/apiService';
 
 // Zod schema for validation
 const signupSchema = object({
@@ -58,7 +59,7 @@ const SignupPage: FC = () => {
     try {
       const response = await signUpUser(dataToSend);
       console.log('Response:', response);
-      navigate('/verification-successful');
+      navigate('/');
     } catch (error: any) { // Type the error as any for flexibility
 
       // Access error details directly from the error object
@@ -73,8 +74,6 @@ const SignupPage: FC = () => {
         alert('Something went wrong. Please try again.');
       }
     }
-
-    navigate('/verification');
   };
 
   return (
