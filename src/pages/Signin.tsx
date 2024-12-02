@@ -13,6 +13,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import FormInput from '../components/FormInput';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from '@emotion/styled';
+import { signInUser } from '../API/apiService';
 
 // Styled Link component
 export const LinkItem = styled(Link)`
@@ -49,9 +50,25 @@ const SigninPage: FC = () => {
   });
 
   const onSubmitHandler: SubmitHandler<ISignin> = (values: ISignin) => {
-    console.log(values);
-   
-    navigate('/verification');
+    try {
+      const response = await signUpUser(dataToSend);
+      console.log('Response:', response);
+      navigate('/');
+    } catch (error: any) { // Type the error as any for flexibility
+
+      // Access error details directly from the error object
+      console.error('Error Message:', error.response?.data); 
+      console.error('Error Status:', error.response?.status);
+      if (error.response?.status === 400) {
+        alert('Invalid email or password.');
+      } else if (error.response?.status === 500) {
+        alert('Server error. Please try again later.'); 
+      } else {
+        console.error('An unexpected error occurred:', error);
+        alert('Something went wrong. Please try again.');
+      }
+    }
+  };
   };
 
   return (
