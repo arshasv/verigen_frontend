@@ -13,12 +13,13 @@ function App() {
     <Router>
       <CssBaseline />
       <Routes>
-        <Route path="/" element={<SigninPage />} /> 
+        <Route path="/signin" element={<SigninPage />} /> 
         <Route path="/signup" element={<SignupPage />} /> 
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/Authentication" element={<Authentication />} />
         <Route path="/password-verified" element={<PasswordVerified />} />
         <Route path="/validation" element={<Validation />} />
+        <Route path="/new-password" element={<SetNewPassword />} />
         <Route path="/home" element={<Home />} />
         <Route path="/new-password" element={<SetNewPassword />} />
 
