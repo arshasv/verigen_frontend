@@ -5,7 +5,7 @@ import { useForm, SubmitHandler, FormProvider } from 'react-hook-form';
 import { object, string, TypeOf } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import FormInput from '../components/FormInput';
-import { Link, useNavigate } from 'react-router-dom'; 
+import { Link, useNavigate } from 'react-router-dom'; // Ensure you're using react-router-dom
 import styled from '@emotion/styled';
 import KeyIcon from '@mui/icons-material/Key';
 
@@ -37,145 +37,121 @@ const ForgotPasswordPage: FC = () => {
 
   const onSubmitHandler: SubmitHandler<IForgotPassword> = (values: IForgotPassword) => {
     console.log(values);
-
-    navigate('/authentication'); 
+    // Handle password reset logic here
+    navigate('/authentication'); // Navigate to authentication page after form submission
   };
 
   return (
-    <Box
+    <Container
+      maxWidth={false}
       sx={{
-        minHeight: '100vh',
-        width: '100%',
-
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
+        height: '100vh',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
       }}
     >
-      <Container
-        maxWidth={false}
-        sx={{
-          height: '100vh',
-          background: 'rgba(255, 255, 255, 0.8)',
-          backdropFilter: 'blur(10px)',
-        }}
+      <Grid
+        container
+        justifyContent='center'
+        alignItems='center'
+        sx={{ width: '100%' }}
       >
-        <Grid
-          container
-          justifyContent='center'
-          alignItems='center'
-          sx={{ width: '100%', height: '100%' }}
-        >
-          <Grid
-            item
-            sx={{
-              maxWidth: '70rem',
-              width: '100%',
-              backgroundColor: 'rgba(255, 255, 255, 0.9)',
-              borderRadius: '8px',
-              boxShadow: '0px 4px 20px rgba(0,0,0,0.1)',
-            }}
-          >
-            <FormProvider {...methods}>
+        <Grid item sx={{ maxWidth: '70rem', width: '100%' }}>
+          <FormProvider {...methods}>
+            <Grid
+              container
+              sx={{
+                py: '6rem',
+                px: { xs: '2rem', sm: '3rem' },
+              }}
+            >
               <Grid
+                item
                 container
+                justifyContent='center'
+                rowSpacing={5}
                 sx={{
-                  py: '6rem',
-                  px: { xs: '2rem', sm: '3rem' },
+                  maxWidth: { sm: '45rem' },
+                  marginInline: 'auto',
                 }}
               >
-                <Grid
-                  item
-                  container
-                  justifyContent='center'
-                  rowSpacing={5}
-                  sx={{
-                    maxWidth: { sm: '45rem' },
-                    marginInline: 'auto',
-                  }}
-                >
-                  <Grid item xs={12} sm={8}>
+                <Grid item xs={12} sm={8}>
+                  <Box
+                    display='flex'
+                    flexDirection='column'
+                    component='form'
+                    noValidate
+                    autoComplete='off'
+                    onSubmit={methods.handleSubmit(onSubmitHandler)}
+                  >
                     <Box
-                      display='flex'
-                      flexDirection='column'
-                      component='form'
-                      noValidate
-                      autoComplete='off'
-                      onSubmit={methods.handleSubmit(onSubmitHandler)}
+                      sx={{
+                        width: '48px',
+                        height: '48px',
+                        borderRadius: '50%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        margin: '0 auto 1.5rem',
+                      }}
                     >
-                      <Box
-                        sx={{
-                          width: '48px',
-                          height: '48px',
-                          borderRadius: '50%',
-                          bgcolor: 'rgba(54, 131, 220, 0.1)',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          margin: '0 auto 1.5rem',
-                        }}
-                      >
-                        <KeyIcon sx={{ color: '#3683dc', fontSize: '24px' }} />
-                      </Box>
-                      <Typography
-                        variant='h4'
-                        component='h1'
-                        sx={{
-                          textAlign: 'center',
-                          mb: '1rem',
-                          color: '#333',
-                        }}
-                      >
-                        Forgot Password?
-                      </Typography>
-                      <Typography
-                        variant='body1'
-                        sx={{ textAlign: 'center', mb: '2rem', color: '#555' }}
-                      >
-                        No worries, we'll send you reset instructions.
-                      </Typography>
-
-                      <FormInput
-                        label='Enter your email'
-                        type='email'
-                        name='email'
-                        focused
-                        required
-                      />
-
-                      <LoadingButton
-                        loading={false} 
-                        type='submit'
-                        variant='contained'
-                        sx={{
-                          py: '0.8rem',
-                          mt: 2,
-                          width: '80%',
-                          marginInline: 'auto',
-                          bgcolor: '#3683dc',
-                          '&:hover': {
-                            bgcolor: '#2a6cb9',
-                          },
-                        }}
-                      >
-                        Proceed
-                      </LoadingButton>
+                      <KeyIcon sx={{ fontSize: '24px' }} />
                     </Box>
-                  </Grid>
-                </Grid>
-                <Grid container justifyContent='center'>
-                  <Stack sx={{ mt: '3rem', textAlign: 'center' }}>
-                    <Typography sx={{ fontSize: '0.9rem' }}>
-                      Remember your password?{' '}
-                      <LinkItem to='/'>Back to Sign in</LinkItem> 
+                    <Typography
+                      variant='h4'
+                      component='h1'
+                      sx={{
+                        textAlign: 'center',
+                        mb: '1rem',
+                      }}
+                    >
+                      Forgot Password?
                     </Typography>
-                  </Stack>
+                    <Typography
+                      variant='body1'
+                      sx={{ textAlign: 'center', mb: '2rem' }}
+                    >
+                      No worries, we'll send you reset instructions.
+                    </Typography>
+
+                    <FormInput
+                      label='Enter your email'
+                      type='email'
+                      name='email'
+                      focused
+                      required
+                    />
+
+                    <LoadingButton
+                      loading={false} // You can manage loading state if needed
+                      type='submit'
+                      variant='contained'
+                      sx={{
+                        py: '0.8rem',
+                        mt: 2,
+                        width: '80%',
+                        marginInline: 'auto',
+                      }}
+                    >
+                      Proceed
+                    </LoadingButton>
+                  </Box>
                 </Grid>
               </Grid>
-            </FormProvider>
-          </Grid>
+              <Grid container justifyContent='center'>
+                <Stack sx={{ mt: '3rem', textAlign: 'center' }}>
+                  <Typography sx={{ fontSize: '0.9rem' }}>
+                    Remember your password?{' '}
+                    <LinkItem to='/signin'>Back to signin</LinkItem> {/* Ensure this points to the correct route */}
+                  </Typography>
+                </Stack>
+              </Grid>
+            </Grid>
+          </FormProvider>
         </Grid>
-      </Container>
-    </Box>
+      </Grid>
+    </Container>
   );
 };
 

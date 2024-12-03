@@ -1,16 +1,16 @@
-import { useState } from 'react'
-import { Box, Button, TextField, Typography } from '@mui/material'
-import KeyIcon from '@mui/icons-material/Key'
+import { useState } from 'react';
+import { Box, Button, TextField, Typography } from '@mui/material';
+import KeyIcon from '@mui/icons-material/Key';
 
 export default function Authentication() {
-  const [answer, setAnswer] = useState('')
-  const [securityQuestion, setSecurityQuestion] = useState('')
+  const [answer, setAnswer] = useState('');
+  const [securityQuestion, setSecurityQuestion] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    // Handle verification logic here
-    console.log('Submitted question:', securityQuestion)
-    console.log('Submitted answer:', answer)
+    e.preventDefault();
+   
+    console.log('Submitted question:', securityQuestion);
+    console.log('Submitted answer:', answer);
   }
 
   return (
@@ -31,7 +31,6 @@ export default function Authentication() {
     >
       <Box
         sx={{
-          backgroundColor: 'rgba(67, 97, 238, 0.1)',
           borderRadius: '50%',
           p: 2,
           mb: 1,
@@ -39,7 +38,6 @@ export default function Authentication() {
       >
         <KeyIcon
           sx={{
-            color: '#4361ee',
             fontSize: 32,
           }}
         />
@@ -59,7 +57,6 @@ export default function Authentication() {
       <Typography
         variant="body1"
         sx={{
-          color: 'text.secondary',
           textAlign: 'center',
           mb: 2,
         }}
@@ -93,17 +90,16 @@ export default function Authentication() {
         variant="contained"
         fullWidth
         sx={{
-          backgroundColor: '#4361ee',
           py: 1.5,
           textTransform: 'none',
           fontSize: '1rem',
           '&:hover': {
-            backgroundColor: '#3451db',
+            backgroundColor: '#3451db', 
           },
         }}
       >
         Submit
       </Button>
     </Box>
-  )
+  );
 }

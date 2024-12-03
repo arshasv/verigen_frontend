@@ -58,7 +58,6 @@ export default function SetNewPassword() {
     >
       <Box
         sx={{
-          backgroundColor: 'rgba(67, 97, 238, 0.1)',
           borderRadius: '50%',
           width: '48px',
           height: '48px',
@@ -70,7 +69,6 @@ export default function SetNewPassword() {
       >
         <KeyIcon
           sx={{
-            color: '#4361ee',
             fontSize: 24,
           }}
         />
@@ -80,7 +78,6 @@ export default function SetNewPassword() {
         variant="h6"
         component="h1"
         sx={{
-          color: '#1a1a1a',
           fontWeight: 500,
         }}
       >
@@ -90,7 +87,6 @@ export default function SetNewPassword() {
       <Typography
         variant="body2"
         sx={{
-          color: 'text.secondary',
           textAlign: 'center',
           mb: 2,
         }}
@@ -102,7 +98,6 @@ export default function SetNewPassword() {
         <Typography
           variant="body2"
           sx={{
-            color: 'error.main',
             textAlign: 'center',
             mb: 2,
           }}
@@ -142,7 +137,6 @@ export default function SetNewPassword() {
         variant="contained"
         fullWidth
         sx={{
-          backgroundColor: '#4361ee',
           maxWidth: 400,
           py: 1.5,
           textTransform: 'none',

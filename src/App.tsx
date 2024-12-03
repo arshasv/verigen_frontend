@@ -1,32 +1,39 @@
-import { CssBaseline } from '@mui/material';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'; 
+import { CssBaseline, ThemeProvider, Button } from '@mui/material';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import HomePage from './pages/Home'; 
 import SigninPage from './pages/Signin'; 
 import SignupPage from './pages/Signup'; 
-import ForgotPassword  from './pages/ForgotPassword';
+import ForgotPassword from './pages/ForgotPassword';
 import Authentication from './pages/Authentication'; 
 import PasswordVerified from './pages/PasswordVerified';
 import Validation from './pages/Validation';
+import { useColorTheme } from './themes/use-color-theme'; 
 import SetNewPassword from './pages/SetNewPassword';
-import Home from './pages/Home'; 
+
 function App() {
+  const { theme, toggleColorMode } = useColorTheme(); 
+
   return (
-    <Router>
+    <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Routes>
-        <Route path="/" element={<SigninPage />} /> 
-        <Route path="/signup" element={<SignupPage />} /> 
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/Authentication" element={<Authentication />} />
-        <Route path="/password-verified" element={<PasswordVerified />} />
-        <Route path="/validation" element={<Validation />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/new-password" element={<SetNewPassword />} />
-
-
-
-
-      </Routes>
-    </Router>
+        <div style={{ position: 'absolute', top: 16, right: 16, zIndex: 10 }}>
+          <Button onClick={toggleColorMode} color="inherit">
+            Toggle Theme
+          </Button>
+        </div>
+      <Router>
+        <Routes>
+          <Route path="/home" element={<HomePage />} />
+          <Route path="/signin" element={<SigninPage />} /> 
+          <Route path="/signup" element={<SignupPage />} /> 
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/authentication" element={<Authentication />} />
+          <Route path="/password-verified" element={<PasswordVerified />} />
+          <Route path="/new-password" element={<SetNewPassword />} />
+          <Route path="/validation" element={<Validation />} />
+        </Routes>
+      </Router>
+    </ThemeProvider>
   );
 }
 

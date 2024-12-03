@@ -1,4 +1,4 @@
-import { Box, Button, Typography } from '@mui/material'
+import { Box, Button, Typography } from '@mui/material';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import { useNavigate } from 'react-router-dom';
 
@@ -6,7 +6,7 @@ export default function Component() {
   const navigate = useNavigate(); 
 
   const handleButtonClick = () => {
-    navigate('/homepage'); 
+    navigate('/home'); 
   };
 
   return (
@@ -22,7 +22,6 @@ export default function Component() {
     >
       <CheckCircleOutlineIcon
         sx={{
-          color: '#4CAF50',
           fontSize: 48,
           mb: 1,
         }}
@@ -31,7 +30,6 @@ export default function Component() {
         variant="h6"
         component="h1"
         sx={{
-          color: '#1a1a1a',
           fontWeight: 500,
           mb: 2,
         }}
@@ -39,20 +37,16 @@ export default function Component() {
         Verification Successful
       </Typography>
       <Button
-      variant="contained"
-      onClick={handleButtonClick} 
-      sx={{
-          backgroundColor: '#4361ee',
+        variant="contained"
+        onClick={handleButtonClick} 
+        sx={{
           px: 4,
           py: 1,
           textTransform: 'none',
-          '&:hover': {
-            backgroundColor: '#3451db',
-          },
         }}
       >
         Let's get started
       </Button>
     </Box>
-  )
+  );
 }
