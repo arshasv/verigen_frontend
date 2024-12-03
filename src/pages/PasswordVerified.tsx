@@ -6,7 +6,7 @@ export default function PasswordVerified() {
   const navigate = useNavigate();
 
   const handleLogin = () => {
-    navigate('/');
+    navigate('/home');
   }
 
   return (
@@ -14,14 +14,11 @@ export default function PasswordVerified() {
       sx={{
         minHeight: '100vh',
         width: '100%',
-      
       }}
     >
       <Box
         sx={{
           height: '100vh',
-          background: 'rgba(255, 255, 255, 0.8)',
-          backdropFilter: 'blur(10px)',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -33,9 +30,7 @@ export default function PasswordVerified() {
           sx={{
             maxWidth: '400px',
             width: '90%',
-            backgroundColor: 'rgba(255, 255, 255, 0.9)',
             borderRadius: '8px',
-            boxShadow: '0px 4px 20px rgba(0,0,0,0.1)',
             padding: '3rem',
             display: 'flex',
             flexDirection: 'column',
@@ -48,7 +43,6 @@ export default function PasswordVerified() {
               width: 56,
               height: 56,
               borderRadius: '50%',
-              backgroundColor: 'rgba(76, 175, 80, 0.1)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -57,7 +51,6 @@ export default function PasswordVerified() {
           >
             <CheckCircleOutlineIcon
               sx={{
-                color: '#4CAF50',
                 fontSize: 32,
               }}
             />
@@ -67,7 +60,6 @@ export default function PasswordVerified() {
             variant="h5"
             component="h1"
             sx={{
-              color: '#1a1a1a',
               fontWeight: 600,
               textAlign: 'center',
             }}
@@ -78,28 +70,22 @@ export default function PasswordVerified() {
           <Typography
             variant="body1"
             sx={{
-              color: '#555',
               textAlign: 'center',
               mb: 2,
             }}
           >
             Your password has been successfully reset.
-           
           </Typography>
 
           <Button
             variant="contained"
             onClick={handleLogin}
             sx={{
-              backgroundColor: '#4361ee',
               py: '0.8rem',
               px: '2rem',
               width: '80%',
               textTransform: 'none',
               fontSize: '1rem',
-              '&:hover': {
-                backgroundColor: '#3451db',
-              },
             }}
           >
             Let's get started
