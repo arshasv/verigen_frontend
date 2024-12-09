@@ -6,14 +6,13 @@ import {
   Stack,
 } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { FC } from 'react';
+import { signInUser } from '../API/apiService';
 import { useForm, SubmitHandler, FormProvider } from 'react-hook-form';
-import { object, string, TypeOf } from 'zod';
+import { object, z} from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import FormInput from '../components/FormInput';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from '@emotion/styled';
-import { signInUser } from '../API/apiService';
 
 // Styled Link component
 export const LinkItem = styled(Link)`
@@ -27,31 +26,26 @@ export const LinkItem = styled(Link)`
 
 
 const signinSchema = object({
-  email: string().min(1, 'Email is required').email('Email is invalid'),
-  password: string()
+  email: z.string().min(1, 'Email is required').email('Email is invalid'),
+  password: z.string()
     .min(1, 'Password is required')
     .min(8, 'Password must be more than 8 characters')
     .max(32, 'Password must be less than 32 characters'),
 });
 
 // Type for sign-in form
-type ISignin = TypeOf<typeof signinSchema>;
+type ISignin = z.infer<typeof signinSchema>;
 
-const SigninPage: FC = () => {
-  const navigate = useNavigate();
-  const defaultValues: ISignin = {
-    email: '',
-    password: '',
-  };
-
-  const methods = useForm<ISignin>({
+export default function SignIn() {
+  const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(signinSchema),
-    defaultValues,
   });
 
-  const onSubmitHandler: SubmitHandler<ISignin> = (values: ISignin) => {
+  const navigate = useNavigate();
+
+  const onSubmitHandler: SubmitHandler<ISignin> = async (data) => {
     try {
-      const response = await signUpUser(dataToSend);
+      const response = await signInUser(data);
       console.log('Response:', response);
       navigate('/');
     } catch (error: any) { // Type the error as any for flexibility
@@ -69,7 +63,7 @@ const SigninPage: FC = () => {
       }
     }
   };
-  };
+
 
   return (
     <Box
@@ -206,5 +200,3 @@ const SigninPage: FC = () => {
     </Box>
   );
 };
-
-export default SigninPage;
