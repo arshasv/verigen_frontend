@@ -6,75 +6,64 @@ import {
   Stack,
 } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { FC } from 'react';
 import { useForm, SubmitHandler, FormProvider } from 'react-hook-form';
-import { object, string, TypeOf } from 'zod';
+import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import FormInput from '../components/FormInput';
 import { Link, useNavigate } from 'react-router-dom';
 import { signUpUser } from '../API/apiService';
 
 // Zod schema for validation
-const signupSchema = object({
-  name: string().min(1, 'Name is required').max(70),
-  email: string().min(1, 'Email is required').email('Email is invalid'),
-  password: string()
+const signupSchema = z.object({
+  name: z.string().min(1, 'Name is required').max(70),
+  email: z.string().min(1, 'Email is required').email('Email is invalid'),
+  security_question: z.string().min(1, { message: 'Security question is required' }),
+  confirmPassword: z.string().min(8, { message: 'Confirm Password must be at least 8 characters' }),
+  answer: z.string().min(1, { message: 'Answer is required' }),
+  password: z.string()
     .min(8, 'Password must be at least 8 characters long')
     .max(32, 'Password must be less than 32 characters')
     .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
     .regex(/[a-zA-Z]/, 'Password must contain at least one letter')
     .regex(/[0-9]/, 'Password must contain at least one number')
-    .regex(/[^a-zA-Z0-9]/, 'Password must contain at least one special character'),
-    
-  passwordConfirm: string().min(1, 'Please confirm your password'),
-  securityQuestion: string().min(1, 'Security question is required'),
-  securityAnswer: string().min(1, 'Answer is required'),
-}).refine((data) => data.password === data.passwordConfirm, {
+    .regex(/[^a-zA-Z0-9]/, 'Password must contain at least one special character')
+})
+.refine((data) => data.password === data.confirmPassword, {
   path: ['passwordConfirm'],
   message: 'Passwords do not match',
 });
 
-type ISignUp = TypeOf<typeof signupSchema>;
+type ISignUp = z.infer<typeof signupSchema>;
 
-const SignupPage: FC = () => {
-  const navigate = useNavigate();
+  export default function Component() {
+    const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
+      resolver: zodResolver(signupSchema)
+    });
   
-  const defaultValues: ISignUp = {
-    name: '',
-    email: '',
-    password: '',
-    passwordConfirm: '',
-    securityQuestion: '',
-    securityAnswer: '',
-  };
+    const navigate = useNavigate();
 
-  const methods = useForm<ISignUp>({
-    resolver: zodResolver(signupSchema),
-    defaultValues,
-  });
-
-  const onSubmitHandler: SubmitHandler<ISignUp> = (values: ISignUp) => {
-    console.log(JSON.stringify(values, null, 4));
-    
-    try {
-      const response = await signUpUser(dataToSend);
-      console.log('Response:', response);
-      navigate('/');
-    } catch (error: any) { // Type the error as any for flexibility
-
-      // Access error details directly from the error object
-      console.error('Error Message:', error.response?.data); 
-      console.error('Error Status:', error.response?.status);
-      if (error.response?.status === 400) {
-        alert('Invalid email or password.');
-      } else if (error.response?.status === 500) {
-        alert('Server error. Please try again later.'); 
-      } else {
-        console.error('An unexpected error occurred:', error);
-        alert('Something went wrong. Please try again.');
-      }
-    }
-  };
+    const onSubmitHandler: SubmitHandler<ISignUp> = async (data) => {
+      // Remove confirmPassword before sending
+      const { confirmPassword, ...dataToSend } = data; 
+     try {
+       const response = await signUpUser(dataToSend);
+       console.log('Response:', response);
+       navigate('/verification-successful');
+     } catch (error: any) { // Type the error as any for flexibility
+ 
+       // Access error details directly from the error object
+       console.error('Error Message:', error.response?.data); 
+       console.error('Error Status:', error.response?.status);
+       if (error.response?.status === 400) {
+         alert('Invalid email or password.');
+       } else if (error.response?.status === 500) {
+         alert('Server error. Please try again later.'); 
+       } else {
+         console.error('An unexpected error occurred:', error);
+         alert('Something went wrong. Please try again.');
+       }
+     }
+   };
 
   return (
     <Box
@@ -200,5 +189,3 @@ const SignupPage: FC = () => {
     </Box>
   );
 };
-
-export default SignupPage;
