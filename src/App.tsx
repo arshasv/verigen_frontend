@@ -9,24 +9,23 @@ import Validation from './pages/Validation';
 import SetNewPassword from './pages/SetNewPassword';
 import Home from './pages/Home';
 import { AuthProvider } from './Context/AuthContext';
+import Upload from './pages/Upload';
+
 function App() {
   return (
     <AuthProvider>
     <Router>
       <CssBaseline />
       <Routes>
-        <Route path="/" element={<SigninPage />} /> 
+        <Route path="/signin" element={<SigninPage />} /> 
         <Route path="/signup" element={<SignupPage />} /> 
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/Authentication" element={<Authentication />} />
         <Route path="/password-verified" element={<PasswordVerified />} />
         <Route path="/validation" element={<Validation />} />
-        <Route path="/home" element={<Home />} />
+        <Route path="/" element={<Home />} />
         <Route path="/new-password" element={<SetNewPassword />} />
-
-
-
-
+        <Route path="/upload" element={<Upload />} />
       </Routes>
     </Router>
     </AuthProvider>
