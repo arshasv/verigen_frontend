@@ -1,200 +1,212 @@
-import React, { FC, useState } from 'react';
+'use client'
+
+import React, { useState, useMemo, useCallback } from 'react';
 import {
   Container,
-  Grid,
-  Box,
+  Button,
   Typography,
+  Box,
   Paper,
+  ThemeProvider,
+  createTheme,
+  CssBaseline,
   IconButton,
+  useMediaQuery,
+  Alert,
 } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import LoadingButton from '@mui/lab/LoadingButton';
-import { useForm, SubmitHandler, FormProvider } from 'react-hook-form';
-import { object, string, TypeOf } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useNavigate } from 'react-router-dom';
+import { styled } from '@mui/material/styles';
 
-interface UploadProps {
-  onClose?: () => void;
-  onFileUpload?: (file: File) => void;
-}
-
-const uploadSchema = object({
-  file: string().min(1, 'File is required').regex(/\.v$/, 'Only .v files are allowed'),
+const VisuallyHiddenInput = styled('input')({
+  clip: 'rect(0 0 0 0)',
+  clipPath: 'inset(50%)',
+  height: 1,
+  overflow: 'hidden',
+  position: 'absolute',
+  bottom: 0,
+  left: 0,
+  whiteSpace: 'nowrap',
+  width: 1,
 });
 
-type IUpload = TypeOf<typeof uploadSchema>;
+const DropZone = styled(Box)(({ theme }) => ({
+  border: `2px dashed ${theme.palette.primary.main}`,
+  borderRadius: theme.shape.borderRadius,
+  padding: theme.spacing(4),
+  textAlign: 'center',
+  cursor: 'pointer',
+  transition: 'background-color 0.3s ease',
+  '&:hover': {
+    backgroundColor: theme.palette.action.hover,
+  },
+}));
 
-const Upload: FC<UploadProps> = ({ onClose, onFileUpload }) => {
+export default function FileUploadPage() {
+  const [mode, setMode] = useState<'light' | 'dark'>('light');
+  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+  const [file, setFile] = useState<File | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
-  const [uploadedFileName, setUploadedFileName] = useState<string | null>(null);
-  const [filePreviewUrl, setFilePreviewUrl] = useState<string | null>(null);
-  
-  const methods = useForm<IUpload>({
-    resolver: zodResolver(uploadSchema),
-    defaultValues: {
-      file: '',
-    },
-  });
 
-  const navigate = useNavigate();
+  const theme = useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode: mode,
+          primary: {
+            main: mode === 'light' ? '#1976d2' : '#90caf9',
+          },
+          background: {
+            default: mode === 'light' ? '#f5f5f5' : '#303030',
+            paper: mode === 'light' ? '#ffffff' : '#424242',
+          },
+        },
+      }),
+    [mode]
+  );
 
-  const onSubmitHandler: SubmitHandler<IUpload> = (data) => {
-    if (data.file && onFileUpload) {
-      const file = new File([], data.file);
-      onFileUpload(file);
-      navigate('/loading');
-    }
+  const toggleTheme = () => {
+    setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
   };
 
-  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setIsDragging(true);
-  };
-
-  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setIsDragging(false);
-  };
-
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setIsDragging(false);
-
-    const files = Array.from(e.dataTransfer.files);
-    const vFile = files.find(file => file.name.endsWith('.v'));
-
-    if (vFile && onFileUpload) {
-      methods.setValue('file', vFile.name); // Set the file name
-      setUploadedFileName(vFile.name); // Set the uploaded file name
-
-      // Create a preview URL for the uploaded file
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setFilePreviewUrl(reader.result as string);
-      };
-      reader.readAsDataURL(vFile); // Only if it's an image; for .v files this may not apply
-
-      onFileUpload(vFile);
-      navigate('/loading');
+  const validateFile = (file: File) => {
+    if (file.name.endsWith('.v')) {
+      setFile(file);
+      setSuccess('File selected successfully');
+      setError(null);
     } else {
-      alert('Please upload a valid .v file.'); // Alert for invalid file type
+      setFile(null);
+      setError('Invalid file type. Please upload a .v file.');
+      setSuccess(null);
     }
   };
+
+  const handleFileChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = event.target.files?.[0];
+    if (selectedFile) {
+      validateFile(selectedFile);
+    }
+  }, []);
+
+  const handleDragEnter = useCallback((event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setIsDragging(true);
+  }, []);
+
+  const handleDragLeave = useCallback((event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setIsDragging(false);
+  }, []);
+
+  const handleDragOver = useCallback((event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+  }, []);
+
+  const handleDrop = useCallback((event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setIsDragging(false);
+    const droppedFile = event.dataTransfer.files[0];
+    if (droppedFile) {
+      validateFile(droppedFile);
+    }
+  }, []);
+
+  const handleUpload = useCallback(() => {
+    if (file) {
+      // Here you would typically send the file to your server
+      console.log('Uploading file:', file.name);
+      setSuccess('File uploaded successfully');
+      // Reset the file input
+      setFile(null);
+    } else {
+      setError('Please select a file before uploading');
+    }
+  }, [file]);
 
   return (
-    <Box
-      sx={{
-        minHeight: '100vh',
-        width: '100%',
-        backgroundColor: '#f5f5f5',
-      }}
-    >
-      <Container maxWidth="sm" sx={{ height: '100vh', display: 'flex', alignItems: 'center' }}>
-        <Grid container justifyContent="center" alignItems="center">
-          <Grid item xs={12}>
-            <Paper elevation={3} sx={{ padding: '2rem', borderRadius: '8px' }}>
-              {onClose && (
-                <IconButton 
-                  sx={{ position: 'absolute', right: 8, top: 8 }} 
-                  onClick={onClose}
-                >
-                  <CloseIcon />
-                </IconButton>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Container maxWidth="sm">
+        <Box sx={{ mt: 8, mb: 4, position: 'relative' }}>
+          <IconButton
+            onClick={toggleTheme}
+            color="inherit"
+            sx={{ position: 'absolute', top: -40, right: 0 }}
+            aria-label={mode === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+          >
+            {mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+          </IconButton>
+          <Paper elevation={3} sx={{ p: 4, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <Typography component="h1" variant="h4" sx={{ mb: 2 }}>
+              Upload File
+            </Typography>
+            <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+              Please select only .v file to upload
+            </Typography>
+
+            <Box sx={{ width: '100%', textAlign: 'center' }}>
+              <DropZone
+                onDragEnter={handleDragEnter}
+                onDragLeave={handleDragLeave}
+                onDragOver={handleDragOver}
+                onDrop={handleDrop}
+                sx={{
+                  backgroundColor: isDragging ? 'action.hover' : 'background.paper',
+                  mb: 2,
+                }}
+              >
+                <CloudUploadIcon sx={{ fontSize: 48, mb: 2, color: 'primary.main' }} />
+                <Typography variant="h6" gutterBottom>
+                  Drag & Drop a file to upload
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  or
+                </Typography>
+                <Button component="label" variant="contained" sx={{ mt: 2 }}>
+                  Select File
+                  <VisuallyHiddenInput type="file" onChange={handleFileChange} accept=".v" />
+                </Button>
+              </DropZone>
+
+              {file && (
+                <Typography variant="body2" sx={{ mt: 2 }}>
+                  Selected file: {file.name}
+                </Typography>
               )}
-              <FormProvider {...methods}>
-                <Box
-                  component="form"
-                  noValidate
-                  autoComplete="off"
-                  onSubmit={methods.handleSubmit(onSubmitHandler)}
-                  sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
-                >
-                  <Typography variant="h4" component="h1" sx={{ mb: '1rem' }}>
-                    Media Upload
-                  </Typography>
-                  <Typography variant="body2" sx={{ mb: '1rem' }}>
-                    Add your Verilog source file here
-                  </Typography>
 
-                  <Paper
-                    elevation={0}
-                    onDragOver={handleDragOver}
-                    onDragLeave={handleDragLeave}
-                    onDrop={handleDrop}
-                    sx={{
-                      border: '2px dashed #ccc',
-                      borderRadius: 1,
-                      padding: 4,
-                      textAlign: 'center',
-                      cursor: 'pointer',
-                      transition: 'all 0.3s ease',
-                      '&:hover': {
-                        borderColor: 'primary.main',
-                        backgroundColor: 'action.hover',
-                      },
-                      borderColor: isDragging ? 'primary.main' : undefined,
-                      bgcolor: isDragging ? 'action.hover' : undefined,
-                      width: '100%',
-                      position: 'relative', // Position relative for absolute positioning of preview
-                    }}
-                  >
-                    <input
-                      type="file"
-                      accept=".v"
-                      hidden
-                      id="file-upload"
-                      {...methods.register('file', { required: true })}
-                    />
-                    <label htmlFor="file-upload" style={{ cursor: 'pointer' }}>
-                      <CloudUploadIcon 
-                        sx={{ fontSize: 48, color: 'primary.main', mb: 2 }} 
-                      />
-                      <Typography>
-                        Drag your file(s) or browse
-                      </Typography>
-                    </label>
+              {error && (
+                <Alert severity="error" sx={{ mt: 2 }}>
+                  {error}
+                </Alert>
+              )}
 
-                    {/* Displaying the uploaded file name and preview */}
-                    {uploadedFileName && (
-                      <Box sx={{ position: 'absolute', bottom: 10, left: 10 }}>
-                        <Typography variant="body1">{uploadedFileName}</Typography>
-                        {filePreviewUrl && (
-                          <img src={filePreviewUrl} alt="preview" style={{ width: 50, height: 50 }} />
-                        )}
-                      </Box>
-                    )}
-                  </Paper>
+              {success && (
+                <Alert severity="success" sx={{ mt: 2 }}>
+                  {success}
+                </Alert>
+              )}
 
-                  <Typography variant="caption" sx={{ color: 'text.secondary', mt: 1 }}>
-                    Only support .v files
-                  </Typography>
-
-                  <LoadingButton
-                    loading={false}
-                    type='submit'
-                    variant='contained'
-                    sx={{
-                      py: '0.8rem',
-                      mt: 2,
-                      width: '80%',
-                      bgcolor: '#3683dc',
-                      '&:hover': {
-                        bgcolor: '#2a6cb9',
-                      },
-                    }}
-                  >
-                    Upload
-                  </LoadingButton>
-                </Box>
-              </FormProvider>
-            </Paper>
-          </Grid>
-        </Grid>
+              <Button
+                onClick={handleUpload}
+                variant="contained"
+                sx={{ mt: 3, mb: 2, py: 1.5 }}
+                disabled={!file}
+                fullWidth
+              >
+                Upload File
+              </Button>
+            </Box>
+          </Paper>
+        </Box>
       </Container>
-    </Box>
+    </ThemeProvider>
   );
-};
+}
 
-export default Upload;

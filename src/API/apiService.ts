@@ -33,3 +33,26 @@ export const signInUser = async (userData: any) => {
     throw error; // Re-throw the error if it's not an AxiosError
   }
 };
+
+export const uploadFile = async (file: File, token: string) => {
+  const formData = new FormData();
+  formData.append('file', file);
+
+  try {
+    const response = await axios.post(`${API_BASE_URL}/upload`, formData, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error uploading file:', error);
+    if (axios.isAxiosError(error)) {
+      console.error('Detailed Error:', error.response?.data);
+      console.error('Error Status:', error.response?.status);
+      throw error; 
+    }
+    throw error; 
+  }
+};
