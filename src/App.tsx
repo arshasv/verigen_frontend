@@ -7,9 +7,11 @@ import Authentication from './pages/Authentication';
 import PasswordVerified from './pages/PasswordVerified';
 import Validation from './pages/Validation';
 import SetNewPassword from './pages/SetNewPassword';
-import Home from './pages/Home'; 
+import Home from './pages/Home';
+import { AuthProvider } from './Context/AuthContext';
 function App() {
   return (
+    <AuthProvider>
     <Router>
       <CssBaseline />
       <Routes>
@@ -27,6 +29,7 @@ function App() {
 
       </Routes>
     </Router>
+    </AuthProvider>
   );
 }
 

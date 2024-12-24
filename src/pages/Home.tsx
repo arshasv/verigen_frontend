@@ -14,6 +14,7 @@ import { styled } from '@mui/material/styles';
 import { useForm, Controller } from 'react-hook-form';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../Context/AuthContext'; // Import the useAuth hook
 
 const theme = createTheme({
   palette: {

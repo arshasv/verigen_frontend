@@ -13,6 +13,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import FormInput from '../components/FormInput';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from '@emotion/styled';
+import { useAuth } from '../Context/AuthContext'; // Import the context
 
 // Styled Link component
 export const LinkItem = styled(Link)`
@@ -37,16 +38,19 @@ const signinSchema = object({
 type ISignin = z.infer<typeof signinSchema>;
 
 export default function SignIn() {
-  const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
+  const methods = useForm<ISignin>({
     resolver: zodResolver(signinSchema),
   });
+  const { register, handleSubmit, formState: { errors } } = methods;
 
   const navigate = useNavigate();
+  const { setUser } = useAuth(); // Use the context
 
   const onSubmitHandler: SubmitHandler<ISignin> = async (data) => {
     try {
       const response = await signInUser(data);
       console.log('Response:', response);
+      setUser(response.data); // Store the response in context
       navigate('/');
     } catch (error: any) { // Type the error as any for flexibility
 
@@ -56,7 +60,21 @@ export default function SignIn() {
       if (error.response?.status === 400) {
         alert('Invalid email or password.');
       } else if (error.response?.status === 500) {
-        alert('Server error. Please try again later.'); 
+        alert('Server error. Please try again later.');   return (
+    <form onSubmit={handleSubmit(onSubmitHandler)}>
+      <div>
+        <label>Email</label>
+        <input type="email" {...register('email')} />
+        {errors.email && <p>{errors.email.message}</p>}
+      </div>
+      <div>
+        <label>Password</label>
+        <input type="password" {...register('password')} />
+        {errors.password && <p>{errors.password.message}</p>}
+      </div>
+      <button type="submit">Sign In</button>
+    </form>
+  );
       } else {
         console.error('An unexpected error occurred:', error);
         alert('Something went wrong. Please try again.');
@@ -67,136 +85,73 @@ export default function SignIn() {
 
   return (
     <Box
+      maxWidth="none"
       sx={{
-        minHeight: '100vh',
-        width: '100%',
-
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
+        height: '100vh',
+        background: 'rgba(255, 255, 255, 0.8)',
+        backdropFilter: 'blur(10px)',
       }}
     >
-      <Container
-        maxWidth={false}
-        sx={{
-          height: '100vh',
-          background: 'rgba(255, 255, 255, 0.8)',
-          backdropFilter: 'blur(10px)',
-        }}
+      <Grid
+        container
+        justifyContent='center'
+        alignItems='center'
+        sx={{ width: '100%', height: '100%' }}
       >
         <Grid
-          container
-          justifyContent='center'
-          alignItems='center'
-          sx={{ width: '100%', height: '100%' }}
+          item
+          sx={{
+            maxWidth: '70rem',
+            width: '100%',
+            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+            borderRadius: '8px',
+            boxShadow: '0px 4px 20px rgba(0,0,0,0.1)',
+          }}
         >
-          <Grid
-            item
-            sx={{
-              maxWidth: '70rem',
-              width: '100%',
-              backgroundColor: 'rgba(255, 255, 255, 0.9)',
-              borderRadius: '8px',
-              boxShadow: '0px 4px 20px rgba(0,0,0,0.1)',
-            }}
-          >
-            <FormProvider {...methods}>
+          <FormProvider {...methods}>
+            <Grid
+              container
+              sx={{
+                py: '6rem',
+                px: { xs: '2rem', sm: '3rem' },
+              }}
+            >
               <Grid
+                item
                 container
+                justifyContent='center'
+                rowSpacing={5}
                 sx={{
-                  py: '6rem',
-                  px: { xs: '2rem', sm: '3rem' },
+                  maxWidth: { sm: '45rem' },
+                  marginInline: 'auto',
                 }}
               >
-                <Grid
-                  item
-                  container
-                  justifyContent='center'
-                  rowSpacing={5}
-                  sx={{
-                    maxWidth: { sm: '45rem' },
-                    marginInline: 'auto',
-                  }}
-                >
-                  <Grid item xs={12} sm={8}>
-                    <Box
-                      display='flex'
-                      flexDirection='column'
-                      component='form'
-                      noValidate
-                      autoComplete='off'
-                      onSubmit={methods.handleSubmit(onSubmitHandler)}
-                    >
-                      <Typography
-                        variant='h4'
-                        component='h1'
-                        sx={{
-                          textAlign: 'center',
-                          mb: '2rem',
-                          color: '#333',
-                        }}
-                      >
-                        Welcome Back
-                      </Typography>
-                      <Typography
-                        variant='h6'
-                        component='h2'
-                        sx={{ textAlign: 'center', mb: '1.5rem', color: '#555' }}
-                      >
-                        Sign in to your account
-                      </Typography>
-
-                      <FormInput
-                        label='Enter your email'
-                        type='email'
-                        name='email'
-                        focused
-                        required
-                      />
-                      <FormInput
-                        type='password'
-                        label='Password'
-                        name='password'
-                        required
-                        focused
-                      />
-
-                      <LoadingButton
-                        loading={false}
-                        type='submit'
-                        variant='contained'
-                        sx={{
-                          py: '0.8rem',
-                          mt: 2,
-                          width: '80%',
-                          marginInline: 'auto',
-                          bgcolor: '#3683dc',
-                          '&:hover': {
-                            bgcolor: '#2a6cb9',
-                          },
-                        }}
-                      >
-                        Sign In
-                      </LoadingButton>
-                    </Box>
-                  </Grid>
-                </Grid>
-                <Grid container justifyContent='center'>
-                  <Stack sx={{ mt: '3rem', textAlign: 'center' }}>
-                    <Typography sx={{ fontSize: '0.9rem', mb: '1rem' }}>
-                      Need an account?{' '}
-                      <LinkItem to='/signup'>Sign up here</LinkItem>
-                    </Typography>
-                    <Typography sx={{ fontSize: '0.9rem' }}>
-                     
-                      <LinkItem to='/forgot-password'> Forgot password </LinkItem>?
-                    </Typography>
-                  </Stack>
+                <Grid item xs={12} sm={8}>
+                  <Box
+                    display='flex'
+                    flexDirection='column'
+                    component='form'
+                    noValidate
+                    onSubmit={handleSubmit(onSubmitHandler)}
+                  >
+                    <div>
+                      <label>Email</label>
+                      <input type="email" {...register('email')} />
+                      {errors.email && <p>{errors.email.message}</p>}
+                    </div>
+                    <div>
+                      <label>Password</label>
+                      <input type="password" {...register('password')} />
+                      {errors.password && <p>{errors.password.message}</p>}
+                    </div>
+                    <button type="submit">Sign In</button>
+                  </Box>
                 </Grid>
               </Grid>
-            </FormProvider>
-          </Grid>
+            </Grid>
+          </FormProvider>
         </Grid>
-      </Container>
+      </Grid>
     </Box>
   );
-};
+}
