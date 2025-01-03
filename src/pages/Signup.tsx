@@ -74,7 +74,7 @@ export default function ImprovedRegistrationForm() {
     try {
       const response = await signUpUser(dataToSend);
       console.log('Response:', response);
-      navigate('/signin');
+      navigate('/');
     } catch (error: any) {
       console.error('Error Message:', error.response?.data);
       console.error('Error Status:', error.response?.status);
@@ -205,7 +205,7 @@ export default function ImprovedRegistrationForm() {
               <Box sx={{ textAlign: 'center', mt: 2 }}>
                 <Typography variant="body2">
                   Have an account?{' '}
-                  <Link href="/sign-in" underline="hover" sx={{ fontWeight: 'medium' }}>
+                  <Link href="/" underline="hover" sx={{ fontWeight: 'medium' }}>
                     Sign in
                   </Link>
                 </Typography>

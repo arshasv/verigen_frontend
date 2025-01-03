@@ -18,6 +18,9 @@ import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { styled } from '@mui/material/styles';
+import { useAuth } from '../Context/AuthContext'; // Import the useAuth hook
+import { uploadFile } from '../API/apiService'; // Import the uploadFile function
+
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -50,6 +53,7 @@ export default function FileUploadPage() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
+  const { user } = useAuth(); // Use the useAuth hook to get user data
 
   const theme = useMemo(
     () =>
@@ -118,17 +122,21 @@ export default function FileUploadPage() {
     }
   }, []);
 
-  const handleUpload = useCallback(() => {
-    if (file) {
-      // Here you would typically send the file to your server
-      console.log('Uploading file:', file.name);
-      setSuccess('File uploaded successfully');
-      // Reset the file input
-      setFile(null);
+  const handleUpload = useCallback(async () => {
+    if (file && user) {
+      try {
+        const response = await uploadFile(file, user.access_token);
+        console.log('File uploaded successfully:', response);
+        setSuccess('File uploaded successfully');
+        setFile(null);
+      } catch (error) {
+        console.error('Error uploading file:', error);
+        setError('Error uploading file');
+      }
     } else {
       setError('Please select a file before uploading');
     }
-  }, [file]);
+  }, [file, user]);
 
   return (
     <ThemeProvider theme={theme}>

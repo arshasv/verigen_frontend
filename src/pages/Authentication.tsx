@@ -1,17 +1,22 @@
-import { useState } from 'react'
-import { Box, Button, TextField, Typography } from '@mui/material'
-import KeyIcon from '@mui/icons-material/Key'
+import { useState } from 'react';
+import { Box, Button, TextField, Typography } from '@mui/material';
+import KeyIcon from '@mui/icons-material/Key';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 export default function Authentication() {
-  const [answer, setAnswer] = useState('')
-  const [securityQuestion, setSecurityQuestion] = useState('')
+  const [answer, setAnswer] = useState('');
+  const [securityQuestion, setSecurityQuestion] = useState('');
+  const navigate = useNavigate(); // Use useNavigate hook
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     // Handle verification logic here
-    console.log('Submitted question:', securityQuestion)
-    console.log('Submitted answer:', answer)
-  }
+    console.log('Submitted question:', securityQuestion);
+    console.log('Submitted answer:', answer);
+
+    // Navigate to the next page after successful submission
+    navigate('/'); // Replace '/next-page' with your actual next page route
+  };
 
   return (
     <Box
@@ -105,5 +110,5 @@ export default function Authentication() {
         Submit
       </Button>
     </Box>
-  )
+  );
 }

@@ -1,6 +1,4 @@
-'use client'
-
-import React, { useState, useMemo } from 'react';
+import React from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -13,17 +11,15 @@ import {
   Button,
   Typography,
   Box,
-  Link,
-  Grid,
   Paper,
-  ThemeProvider,
-  createTheme,
+  Link,
+  Avatar,
   CssBaseline,
-  IconButton,
-  useMediaQuery,
+  Snackbar,
+  Alert,
+  Stack,
 } from '@mui/material';
-import Brightness4Icon from '@mui/icons-material/Brightness4';
-import Brightness7Icon from '@mui/icons-material/Brightness7';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
 const signinSchema = z.object({
   email: z.string().email('Invalid email address').min(1, 'Email is required'),
@@ -35,40 +31,23 @@ const signinSchema = z.object({
 
 type ISignin = z.infer<typeof signinSchema>;
 
-export default function ImprovedSignInForm() {
-  const [mode, setMode] = useState<'light' | 'dark'>('light');
-  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
-
-  const theme = useMemo(
-    () =>
-      createTheme({
-        palette: {
-          mode: mode,
-          primary: {
-            main: mode === 'light' ? '#1976d2' : '#90caf9',
-          },
-          background: {
-            default: mode === 'light' ? '#f5f5f5' : '#303030',
-            paper: mode === 'light' ? '#ffffff' : '#424242',
-          },
-        },
-      }),
-    [mode]
-  );
-
+export default function SignIn() {
   const { register, handleSubmit, formState: { errors } } = useForm<ISignin>({
     resolver: zodResolver(signinSchema),
   });
 
   const navigate = useNavigate();
   const { setUser } = useAuth();
+  const [openSnackbar, setOpenSnackbar] = React.useState(false);
+  const [snackbarMessage, setSnackbarMessage] = React.useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = React.useState<'error' | 'success'>('error');
 
   const onSubmitHandler: SubmitHandler<ISignin> = async (data) => {
     try {
       const response = await signInUser(data);
       console.log('Response:', response);
       setUser(response);
-      navigate('/');
+      navigate('/home');
     } catch (error: any) {
       console.error('Error Message:', error.response?.data);
       console.error('Error Status:', error.response?.status);
@@ -83,86 +62,98 @@ export default function ImprovedSignInForm() {
     }
   };
 
-  const toggleTheme = () => {
-    setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
-  };
-
   return (
-    <ThemeProvider theme={theme}>
+    <Container component="main" maxWidth="xs">
       <CssBaseline />
-      <Container maxWidth="sm">
-        <Box sx={{ mt: 8, mb: 4, position: 'relative' }}>
-          <IconButton
-            onClick={toggleTheme}
-            color="inherit"
-            sx={{ position: 'absolute', top: -40, right: 0 }}
-            aria-label={mode === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+      <Paper
+        elevation={3}
+        sx={{
+          marginTop: 8,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          padding: 4,
+        }}
+      >
+        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+          <LockOutlinedIcon />
+        </Avatar>
+        <Typography component="h1" variant="h5" sx={{ mb: 3 }}>
+          Sign In
+        </Typography>
+        <Box 
+          component="form" 
+          onSubmit={handleSubmit(onSubmitHandler)} 
+          sx={{ mt: 1, width: '100%' }}
+        >
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="email"
+            label="Email Address"
+            autoComplete="email"
+            autoFocus
+            {...register('email')}
+            error={!!errors.email}
+            helperText={errors.email ? errors.email.message : ''}
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            label="Password"
+            type="password"
+            id="password"
+            autoComplete="current-password"
+            {...register('password')}
+            error={!!errors.password}
+            helperText={errors.password ? errors.password.message : ''}
+          />
+          <Box sx={{ mt: 2, mb: 2, textAlign: 'right' }}>
+            <Link href="forgot-password" variant="body2">
+              Forgot password?
+            </Link>
+          </Box>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
           >
-            {mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
-          </IconButton>
-          <Paper elevation={3} sx={{ p: 4, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <Typography component="h1" variant="h4" sx={{ mb: 2 }}>
-              Sign In
+            Sign In
+          </Button>
+          <Stack
+            direction="row"
+            justifyContent="center"
+            alignItems="center"
+            spacing={2}
+            sx={{ mt: 2 }}
+          >
+            <Typography variant="body2">
+              Don't have an account?{' '}
+              <Link href="signup" variant="body2">
+                Sign Up
+              </Link>
             </Typography>
-            <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
-              Please enter your credentials
-            </Typography>
-
-            <Box component="form" onSubmit={handleSubmit(onSubmitHandler)} sx={{ width: '100%' }}>
-              <Grid container spacing={2}>
-                <Grid item xs={12}>
-                  <TextField
-                    fullWidth
-                    id="email"
-                    label="Email Address"
-                    autoComplete="email"
-                    autoFocus
-                    {...register('email')}
-                    error={!!errors.email}
-                    helperText={errors.email?.message}
-                    variant="outlined"
-                    required
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    fullWidth
-                    label="Password"
-                    type="password"
-                    id="password"
-                    autoComplete="current-password"
-                    {...register('password')}
-                    error={!!errors.password}
-                    helperText={errors.password?.message}
-                    variant="outlined"
-                    required
-                  />
-                </Grid>
-              </Grid>
-
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2, py: 1.5 }}
-                size="large"
-              >
-                SIGN IN
-              </Button>
-
-              <Box sx={{ textAlign: 'center', mt: 2 }}>
-                <Typography variant="body2">
-                  Don't have an account?{' '}
-                  <Link href="/sign-up" underline="hover" sx={{ fontWeight: 'medium' }}>
-                    Sign up
-                  </Link>
-                </Typography>
-              </Box>
-            </Box>
-          </Paper>
+          </Stack>
         </Box>
-      </Container>
-    </ThemeProvider>
+      </Paper>
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={() => setOpenSnackbar(false)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert
+          onClose={() => setOpenSnackbar(false)}
+          severity={snackbarSeverity}
+          sx={{ width: '100%' }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
+    </Container>
   );
 }
 

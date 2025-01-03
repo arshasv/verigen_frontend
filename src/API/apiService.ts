@@ -39,7 +39,7 @@ export const uploadFile = async (file: File, token: string) => {
   formData.append('file', file);
 
   try {
-    const response = await axios.post(`${API_BASE_URL}/upload`, formData, {
+    const response = await axios.post(`${API_BASE_URL}/storage/blob/upload?container=verigen`, formData, {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'multipart/form-data',
