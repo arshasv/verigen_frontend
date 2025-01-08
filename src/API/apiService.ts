@@ -56,3 +56,33 @@ export const uploadFile = async (file: File, token: string) => {
     throw error; 
   }
 };
+
+export const fetchSecurityQuestion = async (email: string) => {
+  try {
+    const response = await axios.post(`${API_BASE_URL}/forgot-password/security-question`, { email });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching security question:', error);
+    if (axios.isAxiosError(error)) {
+      console.error('Detailed Error:', error.response?.data);
+      console.error('Error Status:', error.response?.status);
+      throw error;
+    }
+    throw error;
+  }
+};
+
+export const resetPassword = async (email: string, answer: string, new_password: string) => {
+  try {
+    const response = await axios.post(`${API_BASE_URL}/forgot-password/reset`, { email, answer, new_password });
+    return response.data;
+  } catch (error) {
+    console.error('Error resetting password:', error);
+    if (axios.isAxiosError(error)) {
+      console.error('Detailed Error:', error.response?.data);
+      console.error('Error Status:', error.response?.status);
+      throw error;
+    }
+    throw error;
+  }
+};
