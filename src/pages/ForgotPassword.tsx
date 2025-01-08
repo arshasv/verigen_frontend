@@ -1,6 +1,6 @@
 import { Container, Grid, Box, Typography, Stack } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { useForm, SubmitHandler, FormProvider } from 'react-hook-form';
 import { object, string, TypeOf } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -8,6 +8,7 @@ import FormInput from '../components/FormInput';
 import { Link, useNavigate } from 'react-router-dom'; 
 import styled from '@emotion/styled';
 import KeyIcon from '@mui/icons-material/Key';
+import { fetchSecurityQuestion } from '../API/apiService';
 
 export const LinkItem = styled(Link)`
   text-decoration: none;
@@ -26,6 +27,7 @@ type IForgotPassword = TypeOf<typeof forgotPasswordSchema>;
 
 const ForgotPasswordPage: FC = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const defaultValues: IForgotPassword = {
     email: '',
   };
@@ -35,10 +37,18 @@ const ForgotPasswordPage: FC = () => {
     defaultValues,
   });
 
-  const onSubmitHandler: SubmitHandler<IForgotPassword> = (values: IForgotPassword) => {
-    console.log(values);
-
-    navigate('/authentication'); 
+  const onSubmitHandler: SubmitHandler<IForgotPassword> = async (values: IForgotPassword) => {
+    setLoading(true);
+    try {
+      const data = await fetchSecurityQuestion(values.email);
+      console.log('Security Question:', data);
+      // Navigate to the Authentication page with email and security question
+      navigate('/authentication', { state: { email: values.email, securityQuestion: data.security_question } });
+    } catch (error) {
+      console.error('Failed to fetch security question:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -46,7 +56,6 @@ const ForgotPasswordPage: FC = () => {
       sx={{
         minHeight: '100vh',
         width: '100%',
-
         backgroundSize: 'cover',
         backgroundPosition: 'center',
       }}
@@ -143,7 +152,7 @@ const ForgotPasswordPage: FC = () => {
                       />
 
                       <LoadingButton
-                        loading={false} 
+                        loading={loading}
                         type='submit'
                         variant='contained'
                         sx={{

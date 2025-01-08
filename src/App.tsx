@@ -7,9 +7,13 @@ import Authentication from './pages/Authentication';
 import PasswordVerified from './pages/PasswordVerified';
 import Validation from './pages/Validation';
 import SetNewPassword from './pages/SetNewPassword';
-import Home from './pages/Home'; 
+import Home from './pages/Home';
+import { AuthProvider } from './Context/AuthContext';
+import Upload from './pages/Upload';
+
 function App() {
   return (
+    <AuthProvider>
     <Router>
       <CssBaseline />
       <Routes>
@@ -21,12 +25,10 @@ function App() {
         <Route path="/validation" element={<Validation />} />
         <Route path="/home" element={<Home />} />
         <Route path="/new-password" element={<SetNewPassword />} />
-
-
-
-
+        <Route path="/upload" element={<Upload />} />
       </Routes>
     </Router>
+    </AuthProvider>
   );
 }
 
